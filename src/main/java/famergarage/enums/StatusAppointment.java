@@ -1,4 +1,4 @@
-package enums;
+package famergarage.enums;
 
 public enum StatusAppointment {
     APPROVED,

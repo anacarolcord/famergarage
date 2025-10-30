@@ -1,10 +1,11 @@
-package model;
+package famergarage.model;
 
 
-import enums.StatusAppointment;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
+import famergarage.enums.StatusAppointment;
 
 public class Appointment {
     private Long idAppointment;
