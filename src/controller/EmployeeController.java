@@ -1,9 +1,7 @@
-package main.java.famergarage.controller;
+package controller;
 
-import main.java.famergarage.exception.EmployeeNotFoundException;
-import main.java.famergarage.model.Employee;
-
-import java.security.PublicKey;
+import exception.EmployeeNotFoundException;
+import model.Employee;
 
 public class EmployeeController {
 
@@ -37,7 +35,7 @@ public class EmployeeController {
         empployeeExists.setCommissioners(employee.getCommissioners());
         empployeeExists.setRole(employee.getRole());
 
-        employeeDAO.save(empployeeExists);
+        employeeDAO.update(empployeeExists);
     }
 
 }

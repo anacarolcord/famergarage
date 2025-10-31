@@ -1,7 +1,7 @@
-package main.java.famergarage.controller;
+package controller;
 
-import main.java.famergarage.exception.AppointmentNotFoundException;
-import main.java.famergarage.model.Appointment;
+import exception.AppointmentNotFoundException;
+import model.Appointment;
 
 import java.util.List;
 
@@ -30,12 +30,14 @@ public class AppointmentController {
         if(appointmentExits == null){
             throw new AppointmentNotFoundException();
         }
-
-        appointmentExits.setDateTime(appointment.getDateTime());
+        appointmentExits.setVehicles(appointment.getVehicles());
+        appointmentExits.setStartDate(appointment.getStartDate());
+        appointmentExits.setEndDate(appointment.getEndDate());
         appointmentExits.setService(appointment.getService());
         appointmentExits.setStatus(appointment.getStatus());
-        appointmentExits.setVehicles(appointment.getVehicles());
+        appointmentExits.setPrice(appointment.getPrice());
 
-        appointmentDAO.save(appointmentExits);
+
+        appointmentDAO.update(appointmentExits);
     }
 }

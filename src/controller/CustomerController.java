@@ -1,8 +1,8 @@
-package main.java.famergarage.controller;
+package controller;
 
-import main.java.famergarage.dao.CustomerDAO;
-import main.java.famergarage.exception.CustomerNotFoundException;
-import main.java.famergarage.model.Customer;
+import dao.CustomerDAO;
+import exception.CustomerNotFoundException;
+import model.Customer;
 
 
 public class CustomerController {

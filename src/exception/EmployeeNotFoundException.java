@@ -1,4 +1,4 @@
-package main.java.famergarage.exception;
+package exception;
 
 public class EmployeeNotFoundException extends BusinessException{
     public EmployeeNotFoundException(){

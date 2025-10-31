@@ -1,4 +1,4 @@
-package main.java.famergarage.dao;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

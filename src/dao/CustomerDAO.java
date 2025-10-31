@@ -1,6 +1,6 @@
-package main.java.famergarage.dao;
+package dao;
 
-import main.java.famergarage.model.Customer;
+import model.Customer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

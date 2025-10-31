@@ -1,4 +1,4 @@
-package main.java.famergarage.enums;
+package enums;
 
 public enum StatusAppointment {
     APPROVED(1,"Appointment approved"),

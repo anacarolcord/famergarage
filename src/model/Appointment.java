@@ -1,7 +1,7 @@
-package main.java.famergarage.model;
+package model;
 
 
-import main.java.famergarage.enums.StatusAppointment;
+import enums.StatusAppointment;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;

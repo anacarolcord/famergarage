@@ -1,4 +1,4 @@
-package main.java.famergarage.exception;
+package exception;
 
 public class VehicleNotFoundException extends RuntimeException {
     public VehicleNotFoundException() {

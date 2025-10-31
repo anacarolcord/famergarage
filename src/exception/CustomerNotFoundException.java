@@ -1,6 +1,4 @@
-package main.java.famergarage.exception;
-
-import main.java.famergarage.model.Customer;
+package exception;
 
 public class CustomerNotFoundException extends BusinessException {
 

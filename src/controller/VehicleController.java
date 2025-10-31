@@ -1,13 +1,12 @@
-package main.java.famergarage.controller;
+package controller;
 
-import main.java.famergarage.dao.VehicleDAO;
-import main.java.famergarage.exception.CustomerNotFoundException;
-import main.java.famergarage.exception.VehicleNotFoundException;
-import main.java.famergarage.model.Customer;
-import main.java.famergarage.model.Vehicle;
+import dao.VehicleDAO;
+import exception.CustomerNotFoundException;
+import exception.VehicleNotFoundException;
+import model.Customer;
+import model.Vehicle;
 
 import java.util.List;
-import java.util.function.LongToDoubleFunction;
 
 public class VehicleController {
 

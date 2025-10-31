@@ -1,4 +1,4 @@
-package main.java.famergarage.exception;
+package exception;
 
 public class AppointmentNotFoundException extends BusinessException {
     public AppointmentNotFoundException() {
