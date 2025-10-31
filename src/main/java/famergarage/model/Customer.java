@@ -7,6 +7,7 @@ public class Customer {
     private String name;
     private String phone;
     private String email;
+    private String cpf;
 
     public Customer(){}
     public Customer(Long idCustomer, String name, String phone, String email) {
@@ -47,6 +48,15 @@ public class Customer {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+    
 
     @Override
     public boolean equals(Object o) {
