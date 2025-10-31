@@ -1,11 +1,12 @@
-package famergarage.model;
+package main.java.famergarage.model;
 
+
+import main.java.famergarage.enums.StatusAppointment;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import famergarage.enums.StatusAppointment;
 
 public class Appointment {
     private Long idAppointment;
@@ -84,4 +85,5 @@ public class Appointment {
                 ", vehicles=" + vehicles +
                 '}';
     }
+
 }

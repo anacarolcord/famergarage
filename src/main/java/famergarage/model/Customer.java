@@ -1,4 +1,4 @@
-package famergarage.model;
+package main.java.famergarage.model;
 
 import java.util.Objects;
 
@@ -8,6 +8,7 @@ public class Customer {
     private String phone;
     private String email;
     private String cpf;
+
 
     public Customer(){}
     public Customer(Long idCustomer, String name, String phone, String email) {
@@ -56,7 +57,7 @@ public class Customer {
     public String getCpf() {
         return cpf;
     }
-    
+
 
     @Override
     public boolean equals(Object o) {

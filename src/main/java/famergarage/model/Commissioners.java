@@ -1,4 +1,4 @@
-package famergarage.model;
+package main.java.famergarage.model;
 
 import java.util.Objects;
 
