@@ -11,78 +11,73 @@ import java.util.List;
 
 public class CustomerDAO {
 
-    // Método para salvar um novo cliente no banco de dados
+    // Save customer to the database 
     public void save(Customer customer) {
-        // Comando SQL de Insert
+        // SQL statement to insert a new customer
         String sql = "INSERT INTO CUSTOMER (NAME, PHONE, EMAIL) VALUES (?, ?, ?)";
 
-        // Objetos para conexão e execução do comando SQL
+        // Objects for database connection and statement
         Connection conn = null;
         PreparedStatement pstm = null;
 
         try {
-            // Estabelecendo a conexão com o banco de dados
+            // Create a connection and prepare the SQL statement
             conn = ConnectionFactory.getConnection();
-            // Preparando a query com PreparedStatement (evitando SQL Injection)
             pstm = conn.prepareStatement(sql);
 
-            // Atribuindo os valores aos parâmetros da query
+            // Set the values for the SQL statement
             pstm.setString(1, customer.getName());
             pstm.setString(2, customer.getPhone());
             pstm.setString(3, customer.getEmail());
 
-            // Executando o comando SQL
+            // Execute the SQL statement
             pstm.executeUpdate();
 
             System.out.println("Cliente salvo com sucesso!");
         } catch (SQLException e) {
-            // Tratamento de erro na operação de salvamento
-            System.err.println("Erro ao salvar o cliente: " + e.getMessage());
+            // Handle errors during save operation
+            System.err.println("Error saving customer: " + e.getMessage());
         } finally {
-            // Fechar recursos (se os objetos não forem nulos)
+            // Close the connections
             try {
-                // Fechando o PreparedStatement
+                // Closing the prepared statement
                 if (pstm != null)
                     pstm.close();
-
-                // Fechando a conexão com o banco de dados
+                // Closing the connection
                 if (conn != null)
                     conn.close();
 
             } catch (SQLException e) {
-                // Tratamento de erro ao fechar as conexões
-                System.err.println("Erro ao fechar as conexões: " + e.getMessage());
+                // Handle errors when closing connections
+                System.err.println("Error closing connections: " + e.getMessage());
             }
         }
     }
 
-    // Método para buscar um cliente pelo CPF
+    // Find customer by CPF
     public Customer findByCPF(String cpf) {
-        // Comando SQL de Select
+        // SQL Select statement
         String sql = "SELECT * FROM CUSTOMER WHERE CPF = ?";
 
-        // Conexão com o banco de dados
+        // Objects for database connection, statement, and result set
         Connection conn = null;
-        // Preparando a query com PreparedStatement
         PreparedStatement pstm = null;
-        // Objeto para armazenar o resultado da query
         ResultSet rset = null;
-        // Objeto Customer para armazenar o cliente encontrado
         Customer customer = null;
 
         try {
+            // Establishing the connection to the database
             conn = ConnectionFactory.getConnection();
             pstm = conn.prepareStatement(sql);
 
-            // Atribuindo o valor ao parâmetro da query
+            // Setting the value for the query parameter
             pstm.setString(1, cpf);
 
-            // Executando a query e obtendo o resultado
+            // Executing the query and obtaining the result
             rset = pstm.executeQuery();
 
-            // Verificando se um registro foi encontrado
+            // Verifying if a customer was found
             if (rset.next()) {
-                
                 customer = new Customer();
                 customer.setIdCustomer(rset.getLong("ID"));
                 customer.setName(rset.getString("NAME"));
@@ -91,52 +86,53 @@ public class CustomerDAO {
                 customer.setCpf(rset.getString("CPF"));
             }
         } catch (SQLException e) {
-            // Tratamento de erro na operação de busca
-            System.err.println("Erro ao buscar cliente por CPF: " + e.getMessage());
+            // Handle errors during search operation
+            System.err.println("Error searching for customer by CPF: " + e.getMessage());
         } finally {
             try {
-                // Fechando os recursos
+                // Closing the result set
                 if (rset != null)
                     rset.close();
+                // Closing the prepared statement
                 if (pstm != null)
                     pstm.close();
+                // Closing the connection
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // Tratamento de erro ao fechar as conexões
-                System.err.println("Erro ao fechar as conexões: " + e.getMessage());
+                // Handle errors when closing connections
+                System.err.println("Error closing connections: " + e.getMessage());
             }
         }
-        // Retornando o cliente encontrado (ou null se não encontrado)
+        // Returning the found customer
         return customer;
     }
 
-    // Método para buscar clientes pelo nome
+    // Find customers by name
     public List<Customer> findByName(String name) {
-        // Comando SQL de Select
+        // SQL Select statement
         String sql = "SELECT * FROM CUSTOMER WHERE UPPER(NAME) LIKE UPPER(?)";
 
-        // Lista para armazenar os clientes encontrados
+        // List to store found customers
         List<Customer> customers = new ArrayList<>();
 
-        // Conexão com o banco de dados
+        // Database connection
         Connection conn = null;
-        // Preparando a query com PreparedStatement
         PreparedStatement pstm = null;
-        // Objeto para armazenar o resultado da query
         ResultSet rset = null;
 
         try {
             conn = ConnectionFactory.getConnection();
             pstm = conn.prepareStatement(sql);
 
-            // Atribuindo o valor ao parâmetro da query
+            // Setting the value for the query parameter
             pstm.setString(1, "%" + name + "%");
-            // Executando a query e obtendo o resultado
+            
+            // Executing the query and obtaining the result
             rset = pstm.executeQuery();
 
             while (rset.next()) {
-                // Criando um objeto Customer para cada registro encontrado
+                // Creating a Customer object for each found record
                 Customer customer = new Customer();
                 customer.setIdCustomer(rset.getLong("ID"));
                 customer.setName(rset.getString("NAME"));
@@ -147,11 +143,11 @@ public class CustomerDAO {
             }
 
         } catch (SQLException e) {
-            // Tratamento de erro na operação de busca
-            System.err.println("Erro ao buscar clientes por nome: " + e.getMessage());
+            // Handle errors during search operation
+            System.err.println("Error searching for customers by name: " + e.getMessage());
         } finally {
             try {
-                // Fechando os recursos
+                // Closing the resources
                 if (rset != null)
                     rset.close();
                 if (pstm != null)
@@ -159,55 +155,53 @@ public class CustomerDAO {
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // Tratamento de erro ao fechar as conexões
-                System.err.println("Erro ao fechar as conexões: " + e.getMessage());
+                // Handle errors when closing connections
+                System.err.println("Error closing connections: " + e.getMessage());
             }
         }
-        // Retornando a lista de clientes encontrados
+        // Returning the list of found customers
         return customers;
 
     }
 
-    // Método para obter todos os clientes do banco de dados
+    // Find all customers
     public List<Customer> findAll() {
-        // Comando SQL de Select
+        // SQL Select statement
         String sql = "SELECT * FROM CUSTOMER";
 
-        // Lista para armazenar os clientes encontrados
+        // List to store found customers
         List<Customer> customers = new ArrayList<>();
 
-        // Conexão com o banco de dados
+        // Database connection  
         Connection conn = null;
-        // Preparando a query com PreparedStatement
         PreparedStatement pstm = null;
-        // Objeto para armazenar o resultado da query
         ResultSet rset = null;
 
         try {
-            // Estabelecendo a conexão com o banco de dados
+            // Establishing the connection to the database
             conn = ConnectionFactory.getConnection();
             pstm = conn.prepareStatement(sql);
 
-            // Executando a query e obtendo o resultado
+            // Executing the query and obtaining the result
             rset = pstm.executeQuery();
 
             while (rset.next()) {
-                // Criando um objeto Customer para cada registro encontrado
+                // Creating a Customer object for each found record
                 Customer customer = new Customer();
 
-                // Setando os atributos do cliente
+                // Setting the customer attributes
                 customer.setIdCustomer(rset.getLong("ID"));
                 customer.setName(rset.getString("NAME"));
                 customer.setPhone(rset.getString("PHONE"));
                 customer.setEmail(rset.getString("EMAIL"));
 
-                // Adicionando o cliente à lista
+                // Adding the customer to the list 
                 customers.add(customer);
             }
 
         } catch (SQLException e) {
-            // Tratamento de erro na operação de busca
-            System.err.println("Erro ao buscar os clientes: " + e.getMessage());
+            // Handle errors during search operation
+            System.err.println("Error searching for customers: " + e.getMessage());
         } finally {
             try {
                 // Fechando os recursos
@@ -218,42 +212,43 @@ public class CustomerDAO {
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // Tratamento de erro ao fechar as conexões
-                System.err.println("Erro ao fechar as conexões: " + e.getMessage());
+                // Handle errors when closing connections
+                System.err.println("Error closing connections: " + e.getMessage());
             }
 
         }
-        // Retornando a lista de clientes
+        // Returning the list of found customers
         return customers;
     }
 
-    // Método para obter clientes com paginação
+    // Find all customers with pagination
     public List<Customer> findAllPages(int page, int pageSize) {
-        // Comando SQL de Select com paginação
+        // SQL Select statement with pagination
         String sql = "SELECT * FROM CUSTOMER LIMIT ? OFFSET ?";
-        // Lista para armazenar os clientes encontrados
+        // List to store found customers  
         List<Customer> customers = new ArrayList<>();
 
-        // Conexão com o banco de dados
+        // Database connection
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rset = null;
 
         try {
+            // Establishing the connection to the database
             conn = ConnectionFactory.getConnection();
             pstm = conn.prepareStatement(sql);
 
-            // Logica para calcular o OFFSET      
+            // Calculating the offset for pagination
             int offset = (page - 1) * pageSize;
 
-            // Atribuindo os valores aos parâmetros da query 
+            // Setting the values for the query parameters
             pstm.setInt(1, pageSize);
             pstm.setInt(2, offset);
 
-            // Executando a query e obtendo o resultado
+            // Executing the query and obtaining the result
             rset = pstm.executeQuery();
-            
-            // Iterando sobre os resultados
+
+            // Iterating through the result set
             while (rset.next()) {
                 Customer customer = new Customer();
 
@@ -262,15 +257,15 @@ public class CustomerDAO {
                 customer.setPhone(rset.getString("PHONE"));
                 customer.setEmail(rset.getString("EMAIL"));
 
-                // Adicionando o cliente à lista  
+                // Adding the customer to the list
                 customers.add(customer);
             }
         } catch (SQLException e) {
-            // Tratamento de erro na operação de busca
-            System.err.println("Erro ao buscar os clientes de forma paginada: " + e.getMessage());
+            // Handle errors during search operation
+            System.err.println("Error searching for customers in paginated format: " + e.getMessage());
         } finally {
             try {
-                // Fechando os recursos
+                // Closing the resources
                 if (rset != null)
                     rset.close();
                 if (pstm != null)
@@ -278,83 +273,89 @@ public class CustomerDAO {
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // Tratamento de erro ao fechar as conexões
-                System.err.println("Erro ao fechar as conexões: " + e.getMessage());
+                // Handle errors when closing connections
+                System.err.println("Error closing connections: " + e.getMessage());
             }
         }
-        // Retornando a lista de clientes paginados
+        // Returning the list of found customers
         return customers;
     }
 
-    // Método para atualizar um cliente existente no banco de dados
+    // Update customer in the database
     public void update(Customer customer) {
-        // Comando SQL de Update
+        // SQL statement to update an existing customer
         String sql = "UPDATE CUSTOMER SET NAME = ?, PHONE = ?, EMAIL = ? WHERE ID = ?";
-        
-        // Objetos para conexão e execução do comando SQL
+
+        // Database connection  
         Connection conn = null;
         PreparedStatement pstm = null;
-        
+
         try {
+            // Establishing the connection to the database
             conn = ConnectionFactory.getConnection();
             pstm = conn.prepareStatement(sql);
 
-            // Atribuindo os valores aos parâmetros da query
+            // Setting the values for the SQL statement
             pstm.setString(1, customer.getName());
             pstm.setString(2, customer.getPhone());
             pstm.setString(3, customer.getEmail());
 
-            // Atribuindo o ID para o placeholder do WHERE
+            // Setting the ID for the WHERE clause
             pstm.setLong(4, customer.getIdCustomer());
 
-            // Executando o comando SQL
+            // Executing the SQL statement
             pstm.executeUpdate();
         } catch (SQLException e) {
-            // Tratamento de erro na operação de atualização
-            System.err.println("Erro ao atualizar o cliente: " + e.getMessage());
+            // Handle errors during update operation
+            System.err.println("Error updating customers: " + e.getMessage());
         } finally {
             try {
+                // Closing the resources
                 if (pstm != null)
                     pstm.close();
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // Tratamento de erro ao fechar as conexões
-                System.err.println("Erro ao fechar as conexões: " + e.getMessage());
+                // Handle errors when closing connections
+                System.err.println("Error closing connections: " + e.getMessage());
             }
         }
     }
 
-    // Método para deletar um cliente do banco de dados
+    // Delete customer from the database
     public void delete(long id) {
-        // Comando SQL de Delete
+        // Sql statement to delete a customer
         String sql = "DELETE FROM CUSTOMER WHERE ID = ?";
 
+        // Database connection
         Connection conn = null;
         PreparedStatement pstm = null;
 
-        try { 
+        try {
+            // Establishing the connection to the database
             conn = ConnectionFactory.getConnection();
             pstm = conn.prepareStatement(sql);
 
-            // Atribuindo o valor ao parâmetro da query
+            // Setting the ID for the WHERE clause
             pstm.setLong(1, id);
 
-            // Executando o comando SQL
+            // Executing the SQL statement
             pstm.executeUpdate();
 
             System.out.println("Cliente deletado com sucesso!");
         } catch (SQLException e) {
-            System.err.println("Erro ao excluir o cliente: " + e.getMessage());
+            // Handle errors during delete operation
+            System.err.println("Error deleting customer: " + e.getMessage());
         } finally {
+            // Closing the connections
             try {
                 if (pstm != null)
                     pstm.close();
                 if (conn != null)
                     conn.close();
             } catch (SQLException e) {
-                // Tratamento de erro ao fechar as conexões
-                System.err.println("Erro ao fechar as conexões: " + e.getMessage());
+                // Handle errors when closing connections
+                System.err.println("Error closing connections: " + e.getMessage());
             }
         }
     }
