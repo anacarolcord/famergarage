@@ -38,7 +38,7 @@ public class CustomerController {
             customerExists.setName(customer.getName());
             customerExists.setPhone(customer.getPhone());
 
-            customerDAO.update(customerExists);
+            customerDAO.save(customerExists);
 
     }
 

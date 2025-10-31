@@ -1,4 +1,4 @@
-package famergarage.dao;
+package main.java.famergarage.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 
-import famergarage.model.Customer;
-import famergarage.model.Vehicle;
+import main.java.famergarage.model.Customer;
+import main.java.famergarage.model.Vehicle;
 
 public class VehicleDAO {
 
