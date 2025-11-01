@@ -62,7 +62,7 @@ public class VehicleDAO {
     // Update vehicle in the database
     public void update(Vehicle vehicle) {
         // Sql statement to update an existing vehicle
-        String sql = "UPDATE VEHICLE SET PLATE = ?, MODEL = ?, BRAND = ? WHERE ID = ?";
+        String sql = "UPDATE VEHICLE SET PLATE = ?, MODEL = ?, BRAND = ? WHERE PLATE = ?";
 
         // Objects for database connection and statement
         Connection conn = null;
@@ -78,8 +78,8 @@ public class VehicleDAO {
             pstm.setString(1, vehicle.getPlate());
             pstm.setString(2, vehicle.getModel());
             pstm.setString(3, vehicle.getBrand());
-            // Set the ID for the WHERE clause
-            pstm.setLong(4, vehicle.getIdVehicle());
+            // Set the plate for the WHERE clause
+            pstm.setString(4, vehicle.getPlate());
 
             // Execute the SQL statement
             pstm.executeUpdate();
@@ -108,9 +108,9 @@ public class VehicleDAO {
     }
 
     // Delete vehicle from the database
-    public void delete(Long id) {
+    public void delete(String plate) {
         // SQL statement to delete a vehicle
-        String sql = "DELETE FROM VEHICLE WHERE ID = ?";
+        String sql = "DELETE FROM VEHICLE WHERE PLATE = ?";
         // Objects for database connection and statement
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -122,7 +122,7 @@ public class VehicleDAO {
             pstm = conn.prepareStatement(sql);
 
             // Set the ID for the WHERE clause
-            pstm.setLong(1, id);
+            pstm.setString(1, plate);
 
             // Execute the SQL statement
             pstm.executeUpdate();
@@ -203,7 +203,7 @@ public class VehicleDAO {
         return vehicle;
     }
 
-    // Find vehicles by customer CPF
+    // Find vehicles by customer ID
     public List<Vehicle> findByCustomer(long customerId) {
         String sql = "SELECT * FROM VEHICLE WHERE FK_CUSTOMER = ?";
 
@@ -231,7 +231,7 @@ public class VehicleDAO {
                 vehicle.setPlate(rset.getString("PLATE"));
                 vehicle.setModel(rset.getString("MODEL"));
                 vehicle.setBrand(rset.getString("BRAND"));
-                // Set the associated customer (by CPF)
+                // Set the associated customer
                 Customer customer = new Customer();
                 customer.setIdCustomer(customerId);
                 vehicle.setIdCustomer(customer);
