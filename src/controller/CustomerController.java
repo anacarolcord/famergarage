@@ -25,7 +25,7 @@ public class CustomerController {
         return customerDAO.findByCPF(customer.getCpf());
     }
 
-    public void updateCustomer(Customer customer) {
+    public void updateCustomer(Customer customer)throws CustomerNotFoundException {
 
             Customer customerExists = customerDAO.findByCPF(customer.getCpf());
 
@@ -38,7 +38,7 @@ public class CustomerController {
             customerExists.setName(customer.getName());
             customerExists.setPhone(customer.getPhone());
 
-            customerDAO.save(customerExists);
+            customerDAO.update(customerExists);
 
     }
 

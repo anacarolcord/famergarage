@@ -1,19 +1,21 @@
 package model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Employee {
     private Long idEmployee;
     private String nameEmployee;
     private String role;
-    private Commissioners commissioners;
+    private List<Appointment> appointments;
 
     public Employee(){}
-    public Employee(Long idEmployee, String nameEmployee, String role, Commissioners commissioners) {
+    public Employee(Long idEmployee, String nameEmployee, String role, List<Appointment> appointments) {
         this.idEmployee = idEmployee;
         this.nameEmployee = nameEmployee;
         this.role = role;
-        this.commissioners = commissioners;
+        this.appointments=appointments;
+
     }
 
     public Long getIdEmployee() {
@@ -40,23 +42,23 @@ public class Employee {
         this.role = role;
     }
 
-    public Commissioners getCommissioners() {
-        return commissioners;
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 
-    public void setCommissioners(Commissioners commissioners) {
-        this.commissioners = commissioners;
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Employee employee)) return false;
-        return Objects.equals(idEmployee, employee.idEmployee) && Objects.equals(nameEmployee, employee.nameEmployee) && Objects.equals(role, employee.role) && Objects.equals(commissioners, employee.commissioners);
+        return Objects.equals(idEmployee, employee.idEmployee) && Objects.equals(nameEmployee, employee.nameEmployee) && Objects.equals(role, employee.role) && Objects.equals(appointments, employee.appointments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idEmployee, nameEmployee, role, commissioners);
+        return Objects.hash(idEmployee, nameEmployee, role, appointments);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class Employee {
                 "idEmployee=" + idEmployee +
                 ", nameEmployee='" + nameEmployee + '\'' +
                 ", role='" + role + '\'' +
-                ", commissioners=" + commissioners +
+                ", appointments=" + appointments +
                 '}';
     }
 }

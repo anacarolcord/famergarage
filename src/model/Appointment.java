@@ -17,11 +17,13 @@ public class Appointment {
     private Service service;
     private StatusAppointment status;
     private DecimalFormat price;
+    private List<Employee> employees;
 
 
     public Appointment(){}
 
-    public Appointment(Long idAppointment, List<Vehicle> vehicles, LocalDateTime startDate, LocalDateTime endDate, Service service, StatusAppointment status, DecimalFormat price) {
+    public Appointment(Long idAppointment, List<Vehicle> vehicles, LocalDateTime startDate, LocalDateTime endDate,
+                       Service service, StatusAppointment status, DecimalFormat price, List<Employee>employees) {
         this.idAppointment = idAppointment;
         this.vehicles = vehicles;
         this.startDate = startDate;
@@ -29,6 +31,7 @@ public class Appointment {
         this.service = service;
         this.status = status;
         this.price = price;
+        this.employees=employees;
     }
 
     public Long getIdAppointment() {
@@ -87,15 +90,23 @@ public class Appointment {
         this.price = price;
     }
 
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Appointment that)) return false;
-        return Objects.equals(idAppointment, that.idAppointment) && Objects.equals(vehicles, that.vehicles) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(service, that.service) && status == that.status && Objects.equals(price, that.price);
+        return Objects.equals(idAppointment, that.idAppointment) && Objects.equals(vehicles, that.vehicles) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(service, that.service) && status == that.status && Objects.equals(price, that.price) && Objects.equals(employees, that.employees);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idAppointment, vehicles, startDate, endDate, service, status, price);
+        return Objects.hash(idAppointment, vehicles, startDate, endDate, service, status, price, employees);
     }
 
     @Override
@@ -108,6 +119,7 @@ public class Appointment {
                 ", service=" + service +
                 ", status=" + status +
                 ", price=" + price +
+                ", employees=" + employees +
                 '}';
     }
 }
