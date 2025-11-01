@@ -7,6 +7,7 @@ public class Employee {
     private Long idEmployee;
     private String nameEmployee;
     private String role;
+    private String cpf;
     private List<Appointment> appointments;
 
     public Employee(){}
@@ -40,6 +41,14 @@ public class Employee {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public List<Appointment> getAppointments() {
