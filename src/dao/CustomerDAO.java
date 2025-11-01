@@ -1,7 +1,6 @@
 package dao;
 
 import model.Customer;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +10,10 @@ import java.util.List;
 
 public class CustomerDAO {
 
-    // Save customer to the database 
+    // Save customer to the database
     public void save(Customer customer) {
         // SQL statement to insert a new customer
-        String sql = "INSERT INTO CUSTOMER (NAME, PHONE, EMAIL) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO CUSTOMER (NAME, PHONE, EMAIL, CPF) VALUES (?, ?, ?, ?)";
 
         // Objects for database connection and statement
         Connection conn = null;
@@ -29,11 +28,12 @@ public class CustomerDAO {
             pstm.setString(1, customer.getName());
             pstm.setString(2, customer.getPhone());
             pstm.setString(3, customer.getEmail());
+            pstm.setString(4, customer.getCpf());
 
             // Execute the SQL statement
             pstm.executeUpdate();
 
-            System.out.println("Cliente salvo com sucesso!");
+            System.out.println("Customer saved successfully!");
         } catch (SQLException e) {
             // Handle errors during save operation
             System.err.println("Error saving customer: " + e.getMessage());
@@ -127,7 +127,7 @@ public class CustomerDAO {
 
             // Setting the value for the query parameter
             pstm.setString(1, "%" + name + "%");
-            
+
             // Executing the query and obtaining the result
             rset = pstm.executeQuery();
 
@@ -138,6 +138,7 @@ public class CustomerDAO {
                 customer.setName(rset.getString("NAME"));
                 customer.setPhone(rset.getString("PHONE"));
                 customer.setEmail(rset.getString("EMAIL"));
+                customer.setCpf(rset.getString("CPF"));
 
                 customers.add(customer);
             }
@@ -172,7 +173,7 @@ public class CustomerDAO {
         // List to store found customers
         List<Customer> customers = new ArrayList<>();
 
-        // Database connection  
+        // Database connection
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rset = null;
@@ -194,8 +195,9 @@ public class CustomerDAO {
                 customer.setName(rset.getString("NAME"));
                 customer.setPhone(rset.getString("PHONE"));
                 customer.setEmail(rset.getString("EMAIL"));
+                customer.setCpf(rset.getString("CPF"));
 
-                // Adding the customer to the list 
+                // Adding the customer to the list
                 customers.add(customer);
             }
 
@@ -225,7 +227,7 @@ public class CustomerDAO {
     public List<Customer> findAllPages(int page, int pageSize) {
         // SQL Select statement with pagination
         String sql = "SELECT * FROM CUSTOMER LIMIT ? OFFSET ?";
-        // List to store found customers  
+        // List to store found customers
         List<Customer> customers = new ArrayList<>();
 
         // Database connection
@@ -256,6 +258,7 @@ public class CustomerDAO {
                 customer.setName(rset.getString("NAME"));
                 customer.setPhone(rset.getString("PHONE"));
                 customer.setEmail(rset.getString("EMAIL"));
+                customer.setCpf(rset.getString("CPF"));
 
                 // Adding the customer to the list
                 customers.add(customer);
@@ -284,9 +287,9 @@ public class CustomerDAO {
     // Update customer in the database
     public void update(Customer customer) {
         // SQL statement to update an existing customer
-        String sql = "UPDATE CUSTOMER SET NAME = ?, PHONE = ?, EMAIL = ? WHERE ID = ?";
+        String sql = "UPDATE CUSTOMER SET NAME = ?, PHONE = ?, EMAIL = ? WHERE CPF = ?";
 
-        // Database connection  
+        // Database connection
         Connection conn = null;
         PreparedStatement pstm = null;
 
@@ -299,10 +302,9 @@ public class CustomerDAO {
             pstm.setString(1, customer.getName());
             pstm.setString(2, customer.getPhone());
             pstm.setString(3, customer.getEmail());
-
-            // Setting the ID for the WHERE clause
-            pstm.setLong(4, customer.getIdCustomer());
-
+            // Setting the CPF for the WHERE clause
+            pstm.setString(4, customer.getCpf());
+            
             // Executing the SQL statement
             pstm.executeUpdate();
         } catch (SQLException e) {
@@ -323,9 +325,9 @@ public class CustomerDAO {
     }
 
     // Delete customer from the database
-    public void delete(long id) {
+    public void delete(String cpf) {
         // Sql statement to delete a customer
-        String sql = "DELETE FROM CUSTOMER WHERE ID = ?";
+        String sql = "DELETE FROM CUSTOMER WHERE CPF = ?";
 
         // Database connection
         Connection conn = null;
@@ -336,13 +338,13 @@ public class CustomerDAO {
             conn = ConnectionFactory.getConnection();
             pstm = conn.prepareStatement(sql);
 
-            // Setting the ID for the WHERE clause
-            pstm.setLong(1, id);
+            // Setting the CPF parameter for the WHERE clause
+            pstm.setString(1, cpf);
 
             // Executing the SQL statement
             pstm.executeUpdate();
 
-            System.out.println("Cliente deletado com sucesso!");
+            System.out.println("Customer deleted successfully!");
         } catch (SQLException e) {
             // Handle errors during delete operation
             System.err.println("Error deleting customer: " + e.getMessage());
