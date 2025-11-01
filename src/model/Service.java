@@ -6,18 +6,14 @@ public class Service {
     private Long idService;
     private String nameService;
     private String description;
-    private Double price;
-    private Employee employee;
-    private Commissioners commissioners;
+
 
     public Service(){}
-    public Service(Long idService, String nameService, String description, Double price, Employee employee, Commissioners commissioners) {
+    public Service(Long idService, String nameService, String description) {
         this.idService = idService;
         this.nameService = nameService;
         this.description = description;
-        this.price = price;
-        this.employee = employee;
-        this.commissioners = commissioners;
+
     }
 
     public Long getIdService() {
@@ -44,39 +40,18 @@ public class Service {
         this.description = description;
     }
 
-    public Double getPrice() {
-        return price;
-    }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public Commissioners getCommissioners() {
-        return commissioners;
-    }
-
-    public void setCommissioners(Commissioners commissioners) {
-        this.commissioners = commissioners;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Service service)) return false;
-        return Objects.equals(idService, service.idService) && Objects.equals(nameService, service.nameService) && Objects.equals(description, service.description) && Objects.equals(price, service.price) && Objects.equals(employee, service.employee) && Objects.equals(commissioners, service.commissioners);
+        return Objects.equals(idService, service.idService) && Objects.equals(nameService, service.nameService) && Objects.equals(description, service.description)  ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idService, nameService, description, price, employee, commissioners);
+        return Objects.hash(idService, nameService, description);
     }
 
     @Override
@@ -85,9 +60,6 @@ public class Service {
                 "idService=" + idService +
                 ", nameService='" + nameService + '\'' +
                 ", description='" + description + '\'' +
-                ", price=" + price +
-                ", employee=" + employee +
-                ", commissioners=" + commissioners +
                 '}';
     }
 }

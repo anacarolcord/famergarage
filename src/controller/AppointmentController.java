@@ -40,4 +40,8 @@ public class AppointmentController {
 
         appointmentDAO.update(appointmentExits);
     }
+
+    public void delete(Long id){
+        return appointmentDAO.delete(id);
+    }
 }
