@@ -2,7 +2,10 @@ package controller;
 
 import dao.CustomerDAO;
 import exception.CustomerNotFoundException;
+import exception.RequiredFieldException;
 import model.Customer;
+
+import java.util.List;
 
 
 public class CustomerController {
@@ -14,15 +17,26 @@ public class CustomerController {
     }
 
     public void createCustomer(Customer customer){
+        if(customer.getCpf().isBlank() || customer.getName().isBlank() || customer.getPhone().isBlank()){
+            throw new RequiredFieldException();
+        }
          customerDAO.save(customer);
     }
 
-    public void listOfCustomers(){
-        customerDAO.findAll();
+    public List<Customer> listOfCustomers(){
+        return customerDAO.findAll();
     }
 
-    public Customer findCustomerByCPF(Customer customer)throws CustomerNotFoundException{
-        return customerDAO.findByCPF(customer.getCpf());
+    public List<Customer> findAllPages(int page, int pageSize){
+      return  customerDAO.findAllPages(page, pageSize);
+    }
+
+    public Customer findCustomerByCPF(String cpf)throws CustomerNotFoundException{
+        return customerDAO.findByCPF(cpf);
+    }
+
+    public List<Customer> findByName(String name)throws CustomerNotFoundException{
+        return customerDAO.findByName(name);
     }
 
     public void updateCustomer(Customer customer)throws CustomerNotFoundException {
@@ -42,7 +56,7 @@ public class CustomerController {
 
     }
 
-    public void deleteCustomer(Long id)throws CustomerNotFoundException{
-        customerDAO.delete(id);
+    public void deleteCustomer(String cpf)throws CustomerNotFoundException{
+        customerDAO.delete(cpf);
     }
 }

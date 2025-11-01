@@ -1,7 +1,11 @@
 package controller;
 
 import exception.RequiredFieldException;
+import exception.ServNotFoundException;
 import model.Service;
+
+import javax.management.ServiceNotFoundException;
+import java.util.List;
 
 public class ServiceController {
     private final ServiceDAO serviceDAO;
@@ -17,5 +21,30 @@ public class ServiceController {
         }
 
         serviceDAO.save(service);
+    }
+
+    public void delete(Long id) throws ServiceNotFoundException{
+        serviceDAO.delete(id);
+    }
+
+    public List <Service> findAll(){
+        return serviceDAO.findAll();
+    }
+
+    public Service findById(Long id) throws ServNotFoundException {
+        return serviceDAO.findById(id);
+    }
+
+    public void update(Service service){
+        Service serviceExists = serviceDAO.findById(service.getIdService());
+
+        if (serviceExists == null){
+            throw new ServNotFoundException();
+        }
+
+        serviceExists.setNameService(service.getNameService());
+        serviceExists.setDescription(service.getDescription());
+
+        serviceDAO.update(serviceExists);
     }
 }

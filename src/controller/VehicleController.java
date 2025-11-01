@@ -28,7 +28,7 @@ public class VehicleController {
 
     //find vehicle by owner!! maybe a list???maybe a unic obj??? idont knowww
     public List <Vehicle> findByCustomer(Customer customer){
-        Customer customerExists = customerController.findCustomerByCPF(customer);
+        Customer customerExists = customerController.findCustomerByCPF(customer.getCpf());
 
         if (customerExists == null){
             throw new CustomerNotFoundException();
@@ -41,19 +41,6 @@ public class VehicleController {
 
         return vehicleDAO.findByPlate(plate);
     }
-
-    /*public Vehicle finByModel(String model){
-
-        return vehicleDAO.findByModel(model);
-    }
-
-    public  Vehicle findByBrand(String brand){
-        return vehicleDAO.findByBrand(brand);
-    }
-
-    public Vehicle findById(Long id) throws VehicleNotFoundException{
-        return vehicleDAO.findById(id);
-    }*/
 
     public void updateVehicle(Vehicle vehicle){
         Vehicle vehicleExists = vehicleDAO.findByPlate(vehicle.getPlate());
@@ -72,8 +59,12 @@ public class VehicleController {
 
     }
 
-    public void deleteVehicle(Long id){
-        vehicleDAO.delete(id);
+    public void deleteVehicle(String plate) {
+        Vehicle vehicleExists = vehicleDAO.findByPlate(plate);
+        if(vehicleExists==null){
+            throw new VehicleNotFoundException();
+        }
+        vehicleDAO.delete(plate);
     }
 
 }
