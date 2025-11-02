@@ -18,7 +18,7 @@ public class EmployeeController {
 
 
     public void saveEmployee(Employee employee){
-        if(employee.getCpf().isBlank()){
+        if(employee.getCpf().isBlank() || employee.getNameEmployee().isBlank() || employee.getRole().isBlank()){
             throw new RequiredFieldException();
         }
         employeeDAO.save(employee);

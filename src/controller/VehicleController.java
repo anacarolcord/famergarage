@@ -2,6 +2,7 @@ package controller;
 
 import dao.VehicleDAO;
 import exception.CustomerNotFoundException;
+import exception.RequiredFieldException;
 import exception.VehicleNotFoundException;
 import model.Customer;
 import model.Vehicle;
@@ -19,7 +20,10 @@ public class VehicleController {
     }
 
     public void saveVehicle(Vehicle vehicle){
-       vehicleDAO.save(vehicle); //retorna junto com o id
+        if (vehicle.getIdCustomer() == null || vehicle.getPlate().isBlank()){
+            throw new RequiredFieldException();
+        }
+       vehicleDAO.save(vehicle);
     }
 
     public List<Vehicle> listOfVehicles(int page, int pageSize){
