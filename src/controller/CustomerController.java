@@ -17,7 +17,8 @@ public class CustomerController {
     }
 
     public void createCustomer(Customer customer){
-        if(customer.getCpf().isBlank() || customer.getName().isBlank() || customer.getPhone().isBlank()){
+        if(customer.getCpf().isBlank() || customer.getName().isBlank()
+                || customer.getPhone().isBlank() || customer.getEmail().isBlank()){
             throw new RequiredFieldException();
         }
          customerDAO.save(customer);
