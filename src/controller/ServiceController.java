@@ -1,5 +1,6 @@
 package controller;
 
+import dao.ServiceDAO;
 import exception.RequiredFieldException;
 import exception.ServNotFoundException;
 import model.Service;
@@ -28,7 +29,7 @@ public class ServiceController {
     }
 
     public List <Service> findAll(){
-        return serviceDAO.findAll();
+        return serviceDAO.getAll();
     }
 
     public Service findById(Long id) throws ServNotFoundException {
