@@ -16,15 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentDAO {
-    private VehicleDAO vehicleDAO;
-    private EmployeeDAO employeeDAO;
 
-    public AppointmentDAO() {
-        this.vehicleDAO = new VehicleDAO();
-        this.employeeDAO = new EmployeeDAO();
-    }
 
-    public void save(Appointment appointment) {
+    public Appointment save(Appointment appointment) { // Retorna Appointment
         // SQL 1: Insert the main appointment details
         String sqlApp = "INSERT INTO APPOINTMENT (FK_VEHICLE, START_DATE, END_DATE, SERVICE, STATUS, PRICE) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -81,6 +75,8 @@ public class AppointmentDAO {
 
             if (generatedKeys.next()) {
                 newAppointmentId = generatedKeys.getLong(1);
+                // ATRIBUIÇÃO DO ID
+                appointment.setIdAppointment(newAppointmentId);
             } else {
                 // If we don't get an ID, something is critically wrong.
                 throw new SQLException("Failed to create appointment, could not obtain ID.");
@@ -104,6 +100,9 @@ public class AppointmentDAO {
             conn.commit();
             System.out.println("Appointment saved successfully!");
 
+            // RETORNA O OBJETO ATUALIZADO COM O ID
+            return appointment;
+
         } catch (SQLException e) {
             // If any exception occurs, roll back the entire transaction
             System.err.println("Error saving appointment. Initiating rollback...");
@@ -116,6 +115,8 @@ public class AppointmentDAO {
                 // This is a critical error (e.g., database connection lost during rollback)
                 System.err.println("CRITICAL Error: Failed to rollback transaction: " + ex.getMessage());
             }
+            // É importante relançar para que a camada superior saiba que falhou.
+            throw new RuntimeException(e);
         } finally {
             try {
                 // Close the ResultSet
@@ -293,7 +294,82 @@ public class AppointmentDAO {
         }
     }
 
-    public List<Appointment> findByCustomer(long customerId, int page, int pageSize) {
+    public Appointment findById(Long appointmentId) {
+        // SQL query: Select all columns from APPOINTMENT where ID matches the parameter
+        String sql = "SELECT * FROM APPOINTMENT WHERE ID = ?";
+
+        // Object declaration
+        Appointment appointment = null;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rset = null;
+
+        try {
+            conn = ConnectionFactory.getConnection();
+            pstm = conn.prepareStatement(sql);
+
+            // Set parameter (the Appointment ID)
+            pstm.setLong(1, appointmentId);
+
+            rset = pstm.executeQuery();
+
+            // If a result is found (only one is expected for PK search)
+            if (rset.next()) {
+                appointment = new Appointment();
+
+                // Populate appointment data
+                appointment.setIdAppointment(rset.getLong("ID"));
+                appointment.setStartDate(rset.getTimestamp("START_DATE").toLocalDateTime());
+
+                // Handle nullable date
+                if (rset.getTimestamp("END_DATE") != null) {
+                    appointment.setEndDate(rset.getTimestamp("END_DATE").toLocalDateTime());
+                }
+
+                // Handle nullable price
+                if (rset.getObject("PRICE") != null) {
+                    appointment.setPrice(rset.getDouble("PRICE"));
+                }
+
+                // Create shallow Service object
+                Long serviceId = rset.getLong("SERVICE");
+                Service service = new Service();
+                service.setIdService(serviceId);
+                appointment.setService(service);
+
+                // Set Status
+                String statusStr = rset.getString("STATUS");
+                // Assuming StatusAppointment is the Enum name
+                appointment.setStatus(StatusAppointment.valueOf(statusStr));
+
+                // Create shallow Vehicle object
+                Vehicle v = new Vehicle();
+                v.setIdVehicle(rset.getLong("FK_VEHICLE"));
+                appointment.setVehicle(v);
+
+                // Create empty list for employees (shallow load)
+                appointment.setEmployees(new ArrayList<>());
+            }
+        } catch (SQLException e) {
+            System.err.println("Error searching for appointment by ID: " + e.getMessage());
+        } finally {
+            // Close resources
+            try {
+                if (rset != null)
+                    rset.close();
+                if (pstm != null)
+                    pstm.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing connections: " + e.getMessage());
+            }
+        }
+
+        return appointment;
+    }
+
+    public List<Appointment> findByCustomer(Long customerId, int page, int pageSize) {
         // SQL query joins Appointment with Vehicle to filter by customer ID
         String sql = "SELECT A.* FROM APPOINTMENT A " + "JOIN VEHICLE V ON A.FK_VEHICLE = V.ID "
                 + "WHERE V.FK_CUSTOMER = ? " + "LIMIT ? OFFSET ?";
@@ -336,7 +412,7 @@ public class AppointmentDAO {
                     app.setPrice(rset.getDouble("PRICE"));
                 }
 
-                long serviceId = rset.getLong("SERVICE");
+                Long serviceId = rset.getLong("SERVICE");
                 Service service = new Service();
                 service.setIdService(serviceId);
                 app.setService(service);
@@ -418,7 +494,7 @@ public class AppointmentDAO {
                     app.setPrice(rset.getDouble("PRICE"));
                 }
 
-                long serviceId = rset.getLong("SERVICE");
+                Long serviceId = rset.getLong("SERVICE");
                 Service service = new Service();
                 service.setIdService(serviceId);
                 app.setService(service);
@@ -458,7 +534,7 @@ public class AppointmentDAO {
         return appointments;
     }
 
-    public List<Appointment> findByVehiclePages(long vehicleId, int page, int pageSize) {
+    public List<Appointment> findByVehiclePages(Long vehicleId, int page, int pageSize) {
         // SQL statement
         String sql = "SELECT * FROM APPOINTMENT " + "WHERE FK_VEHICLE = ? " + "LIMIT ? OFFSET ?";
 
@@ -504,7 +580,7 @@ public class AppointmentDAO {
                     app.setPrice(rset.getDouble("PRICE"));
                 }
 
-                long serviceId = rset.getLong("SERVICE");
+                Long serviceId = rset.getLong("SERVICE");
                 Service service = new Service();
                 service.setIdService(serviceId);
                 app.setService(service);
@@ -583,7 +659,7 @@ public class AppointmentDAO {
                     app.setPrice(rset.getDouble("PRICE"));
                 }
 
-                long serviceId = rset.getLong("SERVICE");
+                Long serviceId = rset.getLong("SERVICE");
                 Service service = new Service();
                 service.setIdService(serviceId);
                 app.setService(service);
@@ -670,7 +746,7 @@ public class AppointmentDAO {
                     app.setPrice(rset.getDouble("PRICE"));
                 }
 
-                long serviceId = rset.getLong("SERVICE");
+                Long serviceId = rset.getLong("SERVICE");
                 Service service = new Service();
                 service.setIdService(serviceId);
                 app.setService(service);
